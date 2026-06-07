@@ -1,37 +1,77 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+<div align="center">
+<h1>Total Health API</h1>
+<h6><i>Scalable Backend Infrastructure for Digital Health Management</i></h6>
+<hr />
+</div>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 🏗️ Tech Stack
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Framework**: [NestJS](https://nestjs.com/)
+- **Language**: [Typescript](https://www.typescriptlang.org/)
+- **Auth**: [Auth / JWT / Passport](https://www.passportjs.org/)
+- **Database**: [MongoDB](https://www.mongodb.com/), [Prisma](https://www.prisma.io/)
+- **Cloudinary**: [Cloudinary](https://cloudinary.com/)
+- **Swagger**: [Swagger Docs](https://swagger.io/)
+- **Postman**: [Postman](https://www.postman.com/)
+- **Unit Testing** [Unit Testing](https://nextjs.org/docs/app/guides/testing/jest)
 
-## Description
+# Project setup
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+### 1. Clone the Repository
 
 ```bash
-$ npm install
+git clone https://github.com/geodevcodes/total-health.git
+cd total-health
 ```
 
-## Compile and run the project
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment Setup
+
+Create a `.env` file in the project root:
+
+```env
+# APP CONFIG
+NODE_ENV=development
+PORT=8080
+APP_NAME="TotalHealthAPI"
+FRONTEND_URL=https://total-health.vercel.app
+BACKEND_URL=https://total-health-server.vercel.app/api/v1
+API_DOCUMENTATION=https://documenter.getpostman.com/view/24857759/2sBXwjxET6
+
+# DATABASE
+DATABASE_URL=your_mongodb_connection_string
+
+
+# JWT SECRET
+JWT_ACCESS_SECRET=your_jwt_access_secret
+JWT_REFRESH_SECRET=your_jwt_refresh_secret
+JWT_ACCESS_EXPIRES_IN="15m"
+
+
+# GOOGLE CREDENTIALS
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_REDIRECT_URI=your_google_redirect_uri
+
+# CLOUDINARY CREDENTIALS
+CLOUDINARY_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_secret
+
+# PAYSTACK PAYMENT CREDENTIALS
+PAYSTACK_TEST_SECRET_KEY=your_paystack_test_secret_key
+PAYSTACK_TEST_PUBLIC_KEY=your_paystack_public_key
+PAYSTACK_LIVE_SECRET_KEY=your_paystack_live_secret_key
+PAYSTACK_LIVE_PUBLIC_KEY=your_paystack_live_public_key
+
+```
+
+### 4. Compile and run the Server
 
 ```bash
 # development
@@ -44,7 +84,9 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+Visit [http://localhost:8080](http://localhost:8080) to see your server running!
+
+## 📦 Run tests
 
 ```bash
 # unit tests
@@ -57,42 +99,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
+## 📖 API Documentation
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Once the app is running, visit [https://documenter.getpostman.com/view/24857759/2sBXwjxET6](https://documenter.getpostman.com/view/24857759/2sBXwjxET6) for the Postman UI documentation.
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Virtual Menu is an MIT-licensed open source project. If you'd like to join, please [read more here](https://documenter.getpostman.com/view/24857759/2sBXwjxET6).
 
-## Stay in touch
+## 🙏 Acknowledgments
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [https://github.com/geodevcodes](https://github.com/geodevcodes)
+- Website - [https://geodevcodes.vercel.app](https://geodevcodes.vercel.app)
+- Linkedin - [https://www.linkedin.com/in/rasheed-olatunde](https://www.linkedin.com/in/rasheed-olatunde)
 
-## License
+## Built by
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- [Rasheed Olatunde](https://github.com/geodevcodes) (Software Developer)
