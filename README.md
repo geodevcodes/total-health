@@ -41,7 +41,7 @@ PORT=8080
 APP_NAME="TotalHealthAPI"
 FRONTEND_URL=https://total-health.vercel.app
 BACKEND_URL=https://total-health-server.vercel.app/api/v1
-API_DOCUMENTATION=https://documenter.getpostman.com/view/24857759/2sBXwjxET6
+API_DOCUMENTATION=https://documenter.getpostman.com/view/24857759/2sBXwqqqb6
 
 # DATABASE
 DATABASE_URL=your_mongodb_connection_string
@@ -101,11 +101,11 @@ $ npm run test:cov
 
 ## 📖 API Documentation
 
-Once the app is running, visit [https://documenter.getpostman.com/view/24857759/2sBXwjxET6](https://documenter.getpostman.com/view/24857759/2sBXwjxET6) for the Postman UI documentation.
+Once the app is running, visit [https://documenter.getpostman.com/view/24857759/2sBXwqqqb6](https://documenter.getpostman.com/view/24857759/2sBXwqqqb6) for the Postman UI documentation.
 
 ## Support
 
-Virtual Menu is an MIT-licensed open source project. If you'd like to join, please [read more here](https://documenter.getpostman.com/view/24857759/2sBXwjxET6).
+Virtual Menu is an MIT-licensed open source project. If you'd like to join, please [read more here](https://documenter.getpostman.com/view/24857759/2sBXwqqqb6).
 
 ## 🙏 Acknowledgments
 

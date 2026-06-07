@@ -12,7 +12,7 @@ export class AppService {
       api: appName,
       status: 'operational',
       docs: {
-        postman: 'https://documenter.getpostman.com/view/24857759/2sBXwjxET6',
+        postman: 'https://documenter.getpostman.com/view/24857759/2sBXwqqqb6',
         'API Health Check': `${process.env.BACKEND_URL}/health`,
       },
       environment: process.env.NODE_ENV,
@@ -111,7 +111,7 @@ export class AppService {
         </p>
 
         <div class="buttons">
-          <a class="primary" href="https://documenter.getpostman.com/view/24857759/2sBXwjxET6">View Postman Docs</a>
+          <a class="primary" href="https://documenter.getpostman.com/view/24857759/2sBXwqqqb6">View Postman Docs</a>
           <a class="secondary" href="/api/v1/info">API Base</a>
         </div>
 
