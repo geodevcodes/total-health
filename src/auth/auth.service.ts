@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   NotFoundException,
   BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { RegisterResponse } from './entities/auth.entity';
@@ -134,7 +135,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new BadRequestException('Email already exists');
+      throw new ConflictException('Email already exists');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -143,6 +144,7 @@ export class AuthService {
       data: {
         ...data,
         password: hashedPassword,
+        // role: UserRole.USER
       },
       select: {
         id: true,
@@ -194,7 +196,11 @@ export class AuthService {
     });
 
     console.log(`Send password reset link to ${email}: ${token}`);
-    return { message: 'Password reset link sent to your email' };
+    return {
+      message: 'Password reset link sent to your email',
+      email,
+      token,
+    };
   }
 
   // RESET PASSWORD
