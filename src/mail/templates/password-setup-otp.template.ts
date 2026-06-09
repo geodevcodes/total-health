@@ -9,7 +9,7 @@ export function passwordSetupOtpEmailContent(
 <head><meta charset="utf-8" /></head>
 <body style="font-family: Arial; padding:20px;">
   <p>You requested a code to set your password for ${escapeHtml(appName)}.</p>
-  <p>Your verification code is:</p>
+  <p>Your verification code is: </p>
   <p style="font-size: 28px; font-weight: 700; letter-spacing: 0.2em;">${escapeHtml(otp)}</p>
   <p>This code expires in 10 minutes. If you did not request this, you can ignore this email.</p>
 </body>
