@@ -29,6 +29,7 @@ import { ResendOtpDto } from './dto/resend-otp.dto';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -120,11 +121,12 @@ export class AuthController {
   @Post('verify-email')
   @ApiOperation({ summary: 'Verify user email with token' })
   @ApiOkResponse({ type: MessageEntity })
-  verifyEmail(@Body('token') token: string) {
-    return this.authService.verifyEmail(token);
+  verifyEmail(@Body() dto: VerifyEmailDto) {
+    return this.authService.verifyEmail(dto.token);
   }
 
   @Post('logout')
+  @UseGuards(PassportJwtAuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Logout user' })

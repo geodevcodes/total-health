@@ -207,7 +207,6 @@ export class AuthService {
     return {
       message: `Password reset link sent to your email: ${user.email}`,
       email,
-      token,
     };
   }
 
@@ -240,7 +239,7 @@ export class AuthService {
       throw new BadRequestException('Email is already verified');
     }
 
-    const token = Math.floor(1000 + Math.random() * 9000).toString();
+    const token = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
     // Remove old verification tokens
