@@ -4,7 +4,7 @@ export function passwordResetLinkEmailContent(
 ): { subject: string; html: string } {
   const subject = `Reset your ${appName} password`;
   const safeLink = escapeHtml(resetLink);
-const html = `
+  const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,7 @@ const html = `
                 </svg>
               </div>
               <div style="color:#ffffff; font-size:22px; font-weight:700; letter-spacing:-0.3px;">Password Reset</div>
-              <div style="color:rgba(255,255,255,0.75); font-size:13px; margin-top:4px;">${escapeHtml(appName)}</div>
+              <div style="color:rgba(255,255,255,0.75); font-size:13px; margin-top:4px;">By geodevcodes</div>
             </td>
           </tr>
 
