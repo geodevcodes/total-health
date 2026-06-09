@@ -26,26 +26,36 @@ async function bootstrap() {
   app.set('trust proxy', 1);
 
   // 🌍 CORS OPTIONS
+
+  // For development
   app.enableCors({
-    origin: (origin, callback) => {
-      const allowedOrigins: string[] = (process.env.FRONTEND_URL || '')
-        .split(',')
-        .map((o) => o.trim())
-        .filter(Boolean);
-
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS: Origin '${origin}' not allowed`));
-      }
-    },
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    maxAge: 86400,
   });
+
+  // For production
+  // app.enableCors({
+  //   origin: (origin, callback) => {
+  //     const allowedOrigins: string[] = (process.env.FRONTEND_URL || '')
+  //       .split(',')
+  //       .map((o) => o.trim())
+  //       .filter(Boolean);
+
+  //     if (!origin) return callback(null, true);
+
+  //     if (allowedOrigins.includes(origin)) {
+  //       callback(null, true);
+  //     } else {
+  //       callback(new Error(`CORS: Origin '${origin}' not allowed`));
+  //     }
+  //   },
+  //   credentials: true,
+  //   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  //   allowedHeaders: ['Content-Type', 'Authorization'],
+  //   maxAge: 86400,
+  // });
 
   //Helmet (security headers)
   app.use(
