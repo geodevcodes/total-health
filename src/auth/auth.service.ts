@@ -200,9 +200,12 @@ export class AuthService {
       data: { userId: user.id, token, expiresAt },
     });
 
-    console.log(`Send password reset link to ${email}: ${token}`);
+    // Send password reset link
+    const resetlink = `https://total-healthcaree.vercel.app/reset-password?resetToken=${token}`;
+    await this.mailService.sendPasswordResetLink(user.email, resetlink);
+
     return {
-      message: 'Password reset link sent to your email',
+      message: `Password reset link sent to your email: ${user.email}`,
       email,
       token,
     };
