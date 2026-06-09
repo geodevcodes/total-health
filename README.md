@@ -105,7 +105,7 @@ Once the app is running, visit [https://documenter.getpostman.com/view/24857759/
 
 ## Support
 
-Virtual Menu is an MIT-licensed open source project. If you'd like to join, please [read more here](https://documenter.getpostman.com/view/24857759/2sBXwqqqb6).
+Total Health is an MIT-licensed open source project. If you'd like to join, please [read more here](https://documenter.getpostman.com/view/24857759/2sBXwqqqb6).
 
 ## 🙏 Acknowledgments
 

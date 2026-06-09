@@ -10,6 +10,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { RegisterResponse } from './entities/auth.entity';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
+import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
 import * as bcrypt from 'bcrypt';
@@ -19,6 +20,7 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly mailService: MailService,
     private prisma: PrismaService,
   ) {}
 
@@ -42,23 +44,23 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // if (!user.isEmailVerified) {
-    //   const existingToken = await this.prisma.verificationToken.findFirst({
-    //     where: { userId: user.id },
-    //     orderBy: { createdAt: 'desc' },
-    //   });
+    if (!user.isEmailVerified) {
+      const existingToken = await this.prisma.verificationToken.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' },
+      });
 
-    //   const now = new Date();
-    //   const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+      const now = new Date();
+      const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
 
-    //   if (!existingToken || existingToken.createdAt < fiveMinutesAgo) {
-    //     await this.resendVerificationOtp(user.email);
-    //   }
+      if (!existingToken || existingToken.createdAt < fiveMinutesAgo) {
+        await this.resendVerificationOtp(user.email);
+      }
 
-    //   throw new UnauthorizedException(
-    //     'Email not verified. A verification code has been sent to your email.',
-    //   );
-    // }
+      throw new UnauthorizedException(
+        'Email not verified. A verification code has been sent to your email.',
+      );
+    }
     const { password: _, ...safeUser } = user;
     return safeUser;
   }
@@ -153,6 +155,9 @@ export class AuthService {
       },
     });
 
+    // Generate and send verification OTP
+    await this.resendVerificationOtp(user.email);
+
     // generate tokens AFTER user creation
     const tokens = await this.generateTokens(user.id, user.email);
     return {
@@ -232,7 +237,7 @@ export class AuthService {
       throw new BadRequestException('Email is already verified');
     }
 
-    const token = randomBytes(16).toString('hex');
+    const token = Math.floor(1000 + Math.random() * 9000).toString();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
     // Remove old verification tokens
@@ -245,7 +250,13 @@ export class AuthService {
       data: { userId: user.id, token, expiresAt },
     });
 
-    console.log(`Send verification OTP: ${token}`);
+    // Actually send the email now
+    await this.mailService.sendSignupOtp(
+      email,
+      token,
+      user.practiceName ?? email,
+    );
+
     return { message: 'Verification OTP sent to your email' };
   }
 
@@ -285,6 +296,12 @@ export class AuthService {
     await this.prisma.verificationToken.deleteMany({
       where: { userId: record.userId },
     });
+
+    // Send welcome email after successful verification
+    await this.mailService.sendSignupMail(
+      user.email,
+      user.practiceName ?? user.email,
+    );
 
     return { message: 'Email verified successfully' };
   }

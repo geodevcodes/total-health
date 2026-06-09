@@ -15,7 +15,7 @@ async function bootstrap() {
   });
 
   const options = new DocumentBuilder()
-    .setTitle('Virtual Menu API')
+    .setTitle('Total Health API')
     .setDescription('API documentation for Users, Menus, and Auth')
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })

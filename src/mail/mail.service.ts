@@ -1,26 +1,148 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMailDto } from './dto/create-mail.dto';
-import { UpdateMailDto } from './dto/update-mail.dto';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
+import { passwordResetLinkEmailContent } from './templates/password-reset-link.template';
+import { EmailConfig, getEmailConfig } from '../config/email-provider.config';
+import { signupTemplate } from './templates/signup.template';
+import { verifyEmailTemplate } from './templates/verify-email.template';
 
+const RESEND_API_URL = 'https://api.resend.com/emails';
+
+// Sends transactional email via Resend or SMTP (e.g. Mailtrap in development).
 @Injectable()
 export class MailService {
-  create(createMailDto: CreateMailDto) {
-    return 'This action adds a new mail';
+  private readonly logger = new Logger(MailService.name);
+
+  // Delivers the signup verification code using the shared HTML template and app branding.
+  async sendSignupOtp(to: string, otp: string, name: string): Promise<void> {
+    const env = getEmailConfig();
+    const { subject, html } = verifyEmailTemplate(
+      env.appName ?? 'Total Health',
+      otp,
+      name,
+    );
+    await this.deliver(to, subject, html, env);
   }
 
-  findAll() {
-    return `This action returns all mail`;
+  async sendSignupMail(to: string, name: string): Promise<void> {
+    const env = getEmailConfig();
+    const { subject, html } = signupTemplate(
+      env.appName ?? 'Total Health',
+      name,
+    );
+    await this.deliver(to, subject, html, env);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mail`;
+  // Delivers the password reset link using the shared HTML template and app branding.
+  async sendPasswordResetLink(to: string, resetLink: string): Promise<void> {
+    const env = getEmailConfig();
+    const { subject, html } = passwordResetLinkEmailContent(
+      env.appName ?? 'Total Health',
+      resetLink,
+    );
+    await this.deliver(to, subject, html, env);
   }
 
-  update(id: number, updateMailDto: UpdateMailDto) {
-    return `This action updates a #${id} mail`;
+  private async deliver(
+    to: string,
+    subject: string,
+    html: string,
+    env: EmailConfig,
+  ): Promise<void> {
+    if (!env.emailFrom?.trim()) {
+      throw new ServiceUnavailableException(
+        'Email sender is not configured. Set EMAIL_FROM.',
+      );
+    }
+    const from = env.emailFrom.trim();
+    if (env.provider === 'smtp') {
+      await this.sendSmtp(to, from, subject, html, env);
+      return;
+    }
+    await this.sendResend(to, from, subject, html, env);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mail`;
+  private async sendResend(
+    to: string,
+    from: string,
+    subject: string,
+    html: string,
+    env: EmailConfig,
+  ): Promise<void> {
+    if (!env.resendApiKey?.trim()) {
+      this.logger.error(
+        'RESEND_API_KEY is not set; cannot send email. Configure Resend or switch to SMTP (e.g. Mailtrap).',
+      );
+      throw new ServiceUnavailableException(
+        'Email is not configured. Set RESEND_API_KEY and EMAIL_FROM, or SMTP_* for development.',
+      );
+    }
+
+    const res = await fetch(RESEND_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.resendApiKey.trim()}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        html,
+      }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      this.logger.error(`Resend API error ${res.status}: ${text}`);
+      throw new ServiceUnavailableException('Failed to send email.');
+    }
+  }
+
+  private async sendSmtp(
+    to: string,
+    from: string,
+    subject: string,
+    html: string,
+    env: EmailConfig,
+  ): Promise<void> {
+    if (
+      !env.smtpHost?.trim() ||
+      !env.smtpUser?.trim() ||
+      !env.smtpPass?.trim()
+    ) {
+      this.logger.error(
+        'SMTP is selected but SMTP_HOST, SMTP_USER, or SMTP_PASS is missing.',
+      );
+      throw new ServiceUnavailableException(
+        'Email is not configured. Set SMTP_HOST, SMTP_USER, SMTP_PASS, and EMAIL_FROM.',
+      );
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: env.smtpHost.trim(),
+      port: env.smtpPort ?? 587,
+      secure: env.smtpSecure ?? false,
+      auth: {
+        user: env.smtpUser.trim(),
+        pass: env.smtpPass.trim(),
+      },
+    });
+
+    try {
+      await transporter.sendMail({
+        from,
+        to,
+        subject,
+        html,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      this.logger.error(`SMTP send failed: ${message}`);
+      throw new ServiceUnavailableException('Failed to send email.');
+    }
   }
 }
