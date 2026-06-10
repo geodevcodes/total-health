@@ -133,7 +133,7 @@ export function signupTemplate(
                 <a href="#" style="color:#9ca3af; text-decoration:none;">Unsubscribe</a> · <a href="#" style="color:#9ca3af; text-decoration:none;">Email preferences</a>
               </p>
               <p style="margin:0; font-size:12px; color:#c4c9d4;">
-                Total, 313 Magodo Brooks Estate, Lagos, Nigeria &nbsp;·&nbsp; © 2025 Total Health
+                Total Health, 313 Magodo Brooks Estate, Lagos, Nigeria &nbsp;·&nbsp; © 2026 Total Health
               </p>
             </td>
           </tr>
