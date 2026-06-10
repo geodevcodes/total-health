@@ -10,6 +10,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { RegisterResponse } from './entities/auth.entity';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
+import { UserAccountType } from '../users/entities/user.entity';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { randomBytes } from 'crypto';
@@ -68,12 +69,12 @@ export class AuthService {
   // LOGIN
   async login(email: string, password: string) {
     const user = await this.validateCredentials(email, password);
-    return this.generateTokens(user.id, user.email);
+    return this.generateTokens(user.id, user.email, user.role);
   }
 
   // GENERATE TOKENS
-  async generateTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
+  async generateTokens(userId: string, email: string, role: UserAccountType) {
+    const payload = { sub: userId, email, role };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_ACCESS_SECRET,
@@ -96,6 +97,7 @@ export class AuthService {
       user: {
         id: userId,
         email,
+        role,
       },
     };
   }
@@ -124,7 +126,7 @@ export class AuthService {
         throw new ForbiddenException('Access denied');
       }
 
-      return this.generateTokens(user.id, user.email);
+      return this.generateTokens(user.id, user.email, user.role);
     } catch {
       throw new ForbiddenException('Invalid or expired refresh token');
     }
@@ -146,12 +148,13 @@ export class AuthService {
       data: {
         ...data,
         password: hashedPassword,
-        // role: UserRole.USER
+        role: data.role ?? UserAccountType.HOSPITAL,
       },
       select: {
         id: true,
         email: true,
         practiceName: true,
+        role: true,
       },
     });
 
@@ -159,7 +162,7 @@ export class AuthService {
     await this.resendVerificationOtp(user.email);
 
     // generate tokens AFTER user creation
-    const tokens = await this.generateTokens(user.id, user.email);
+    const tokens = await this.generateTokens(user.id, user.email, user.role);
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
@@ -167,6 +170,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         practiceName: user.practiceName,
+        role: user.role,
       },
     };
   }
@@ -179,6 +183,7 @@ export class AuthService {
       email: user.email,
       practiceName: user.practiceName,
       isEmailVerified: user.isEmailVerified,
+      role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

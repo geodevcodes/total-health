@@ -21,6 +21,7 @@ model User {
   practiceName       String
   avatar             String?
   phoneNumber        String?
+  role               UserAccountType     @default(HOSPITAL)
   provider           AuthProvider        @default(LOCAL)
   providerId         String?
   isEmailVerified    Boolean             @default(false)
@@ -36,6 +37,13 @@ enum AuthProvider {
   LOCAL
   GOOGLE
 }
+
+enum UserAccountType {
+  ADMIN
+  HOSPITAL
+  PHARMACY
+}
+
 
 model UserSetting {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
