@@ -104,7 +104,7 @@ export function verifyEmailTemplate(
                 Sent by <a href="mailto:support@geodevcodes.dev" style="color:#9f7aea; text-decoration:none;">support@geodevcodes.dev</a> · <a href="#" style="color:#aaaaaa; text-decoration:none;">Unsubscribe</a> · <a href="#" style="color:#aaaaaa; text-decoration:none;">Email preferences</a>
               </p>
               <p style="margin:0; font-size:12px; color:#cccccc;">
-                Simpool, 313 Magodo Brooks Estate, Lagos, Nigeria
+                Total Health, 313 Magodo Brooks Estate, Lagos, Nigeria
               </p>
 
             </td>
