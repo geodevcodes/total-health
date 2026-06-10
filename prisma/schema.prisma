@@ -23,6 +23,7 @@ model User {
   phoneNumber        String?
   role               UserAccountType     @default(HOSPITAL)
   provider           AuthProvider        @default(LOCAL)
+  pharmacyProfile    PharmacyProfile?
   providerId         String?
   isEmailVerified    Boolean             @default(false)
   refreshToken       String?
@@ -74,6 +75,7 @@ model VerificationToken {
   user User @relation(fields: [userId], references: [id])
 }
 
+// Upload
 model Upload {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   url       String
@@ -81,4 +83,72 @@ model Upload {
   provider  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+// Pharmacy schema
+model PharmacyProfile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  address     String
+  cacNumber   String?
+  bio         String?
+  pcnLicenseUrl        String?
+  businessRegDocUrl    String?
+  hmoAffiliations      String[]
+  isSetupComplete      Boolean  @default(false)
+
+  user              User               @relation(fields: [userId], references: [id])
+  workingSchedules  WorkingSchedule[]
+  branches          PharmacyBranch[]
+  drugCategories    PharmacyDrugCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkingSchedule {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  pharmacyId String   @db.ObjectId
+  day        DayOfWeek
+  fromTime   String   // e.g. "9:00 AM"
+  toTime     String   // e.g. "4:00 PM"
+  isActive   Boolean  @default(true)
+
+  pharmacy PharmacyProfile @relation(fields: [pharmacyId], references: [id])
+}
+
+model PharmacyBranch {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  pharmacyId       String   @db.ObjectId
+  branchAddress    String
+  emergencyPhone   String?
+  servicesOffered  String[]
+
+  pharmacy PharmacyProfile @relation(fields: [pharmacyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PharmacyDrugCategory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  pharmacyId String   @db.ObjectId
+  name       String   // e.g. "Antiretrovirals (ARV)"
+  drugs      String[] // e.g. ["Remdesivir", "Tenofovir"]
+
+  pharmacy PharmacyProfile @relation(fields: [pharmacyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }

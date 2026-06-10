@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import { UploadModule } from './upload/upload.module';
 import { RootController } from './root.controller';
 import { MailModule } from './mail/mail.module';
-// import { MenuModule } from './menu/menu.module';
+import { PharmacyModule } from './pharmacy/pharmacy.module';
 
 @Module({
   imports: [
@@ -33,7 +33,7 @@ import { MailModule } from './mail/mail.module';
     PrismaModule,
     AuthModule,
     MailModule,
-    // MenuModule,
+    PharmacyModule,
   ],
   controllers: [RootController, AppController],
   providers: [AppService],
