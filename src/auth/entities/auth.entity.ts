@@ -42,5 +42,6 @@ export class RegisterResponse {
     id: string;
     email: string;
     practiceName: string;
+    role: string;
   };
 }

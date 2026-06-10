@@ -1,12 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { UserAccountType } from '../entities/user.entity';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -33,6 +36,14 @@ export class CreateUserDto {
     message: 'Invalid phone number format',
   })
   phoneNumber: string;
+
+  @IsOptional()
+  @IsEnum(UserAccountType)
+  @ApiPropertyOptional({
+    enum: UserAccountType,
+    default: UserAccountType.HOSPITAL,
+  })
+  role?: UserAccountType;
 
   @ApiProperty({
     example: 'PasswordTest@12',

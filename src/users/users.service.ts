@@ -31,6 +31,7 @@ export class UsersService {
         email: true,
         practiceName: true,
         isEmailVerified: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -48,6 +49,7 @@ export class UsersService {
         email: true,
         practiceName: true,
         isEmailVerified: true,
+        role: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -105,6 +107,7 @@ export class UsersService {
         id: true,
         email: true,
         refreshToken: true,
+        role: true,
       },
     });
   }
