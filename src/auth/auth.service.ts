@@ -206,7 +206,8 @@ export class AuthService {
     });
 
     // Send password reset link
-    const resetlink = `https://total-healthcaree.vercel.app/reset-password?resetToken=${token}`;
+    // const resetlink = `https://total-healthcaree.vercel.app/reset-password?resetToken=${token}`;
+    const resetlink = `${process.env.FRONTEND_URL}/reset-password?resetToken=${token}`;
     await this.mailService.sendPasswordResetLink(user.email, resetlink);
 
     return {

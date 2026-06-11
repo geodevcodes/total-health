@@ -11,6 +11,7 @@ import { UploadModule } from './upload/upload.module';
 import { RootController } from './root.controller';
 import { MailModule } from './mail/mail.module';
 import { PharmacyModule } from './pharmacy/pharmacy.module';
+import { PharmacistModule } from './pharmacist/pharmacist.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PharmacyModule } from './pharmacy/pharmacy.module';
     AuthModule,
     MailModule,
     PharmacyModule,
+    PharmacistModule,
   ],
   controllers: [RootController, AppController],
   providers: [AppService],

@@ -8,6 +8,7 @@ import { passwordResetLinkEmailContent } from './templates/password-reset-link.t
 import { EmailConfig, getEmailConfig } from '../config/email-provider.config';
 import { signupTemplate } from './templates/signup.template';
 import { verifyEmailTemplate } from './templates/verify-email.template';
+import { pharmacistInviteTemplate } from './templates/pharmacist-invite.template';
 
 const RESEND_API_URL = 'https://api.resend.com/emails';
 
@@ -42,6 +43,23 @@ export class MailService {
     const { subject, html } = passwordResetLinkEmailContent(
       env.appName ?? 'Total Health',
       resetLink,
+    );
+    await this.deliver(to, subject, html, env);
+  }
+
+  //Pharmacist Invite
+  async sendPharmacistInvite(
+    to: string,
+    pharmacyName: string,
+    inviteLink: string,
+    employeeNumber?: string,
+  ): Promise<void> {
+    const env = getEmailConfig();
+    const { subject, html } = pharmacistInviteTemplate(
+      env.appName ?? 'Total Health',
+      pharmacyName,
+      inviteLink,
+      employeeNumber,
     );
     await this.deliver(to, subject, html, env);
   }
