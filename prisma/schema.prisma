@@ -103,6 +103,9 @@ model PharmacyProfile {
   branches          PharmacyBranch[]
   drugCategories    PharmacyDrugCategory[]
 
+  pharmacists      Pharmacist[]
+  pharmacistInvites PharmacistInvite[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -151,4 +154,55 @@ enum DayOfWeek {
   FRIDAY
   SATURDAY
   SUNDAY
+}
+
+// Pharmacist Schema
+
+model Pharmacist {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  pharmacyId       String            @db.ObjectId
+  firstName        String?
+  lastName         String?
+  email            String
+  phoneNumber      String?
+  workEmail        String?
+  licenseNumber    String?
+  employeeNumber   String?
+  languagesSpoken  String[]
+  bio              String?
+  avatar           String?
+  isActive         Boolean           @default(true)
+  status           PharmacistStatus  @default(ACTIVE)
+
+  pharmacy PharmacyProfile @relation(fields: [pharmacyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PharmacistInvite {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  pharmacyId     String        @db.ObjectId
+  email          String
+  employeeNumber String?
+  status         InviteStatus  @default(PENDING)
+  expiresAt      DateTime
+  token          String        @unique
+
+  pharmacy PharmacyProfile @relation(fields: [pharmacyId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PharmacistStatus {
+  ACTIVE
+  DISABLED
+  REMOVED
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
 }
