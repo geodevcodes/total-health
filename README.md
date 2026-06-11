@@ -39,7 +39,7 @@ Create a `.env` file in the project root:
 NODE_ENV=development
 PORT=8080
 APP_NAME="TotalHealthAPI"
-FRONTEND_URL=https://total-health.vercel.app
+FRONTEND_URL=https://total-healthcaree.vercel.app
 BACKEND_URL=https://total-health-server.vercel.app/api/v1
 API_DOCUMENTATION=https://documenter.getpostman.com/view/24857759/2sBXwqqqb6
 
